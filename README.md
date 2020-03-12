@@ -1,6 +1,7 @@
 # SoalShiftSISOP20_modul2_A01
 
 Mochamad Haikal Ghiffari - 05111840000095
+Nikodemus Siahaan - 05111840000151
 
 # Soal1
 
