@@ -1,2 +1,2 @@
 sekarang=`date`
-echo "Sukses, $sekarang"
+echo "Sukses, $sekarang" >> log.log
