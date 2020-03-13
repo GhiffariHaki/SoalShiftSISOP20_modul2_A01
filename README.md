@@ -12,23 +12,28 @@ i. Detik: 0-59 atau * (any value)
 ii. Menit: 0-59 atau * (any value)
 iii. Jam: 0-23 atau * (any value)
 iv. Path file .sh
-b. Program akan mengeluarkan pesan error jika argumen yang diberikan tidak
-sesuai
+b. Program akan mengeluarkan pesan error jika argumen yang diberikan tidak sesuai
 c. Program hanya menerima 1 config cron
 d. Program berjalan di background (daemon)
 e. Tidak boleh menggunakan fungsi system()
 
 # Jawaban
 
-A. Dalam bagian ini, kita harus memastikan bahwa program menerima 4 argumen serta sesuai dengan apa yang kita inginkan. Oleh karena itu, dibuat beberapa error handling untuk mewujudkan hal tersebut. Contohnya :
+A. Soal : Program menerima 4 argumen berupa detik, menit, jam, path file.
+Program
+
+B. Soal : Program akan mengeluarkan pesan error jika argumen yang diberikan tidak sesuai.
+Maksud dari soal ini yang kami tangkap adalah kami memastikan bahwa argumen untuk detik,menit,jam merupakan angka dan berada dalam suatu range. Untuk memastikan argumen berisi angka, kami membuat suatu fungsi yang dinamakan cekdigit. Fungsi cekdigit berbentuk sebagai berikut:
 ```
-  // Mengecek apabila argumen sama dengan 4
-  if(argc != 5){ //Argumen terakhir untuk NULL
-    printf("Harus 4 Argumen!!!\n");
-    return 0;
+int cekdigit(char* input){
+  int i=0;
+  for(i; i < strlen(input); i++){
+    if(isalpha(input[i])) return -1;
   }
-  ```
-Dalam potongan kode ini, kami memastikan bahwa argumen yang dimasukan berisi 5 argumen yang ditandai dengan argc (Argumen yang terakhir merupakan NULL). Oleh karena itu, jika argumen tidak sama dengan 5 program tidak akan berjalan dan memberitahu bahwa user hanya bisa memberikan 4 argumen.
+  return 1;
+}
+```
+Fungsi cekdigit dibangun agar dapat dipakai dalam error handling untuk argumen detik,menit,jam. Setelah dibuat fungsi cekdigit, kami membuat if-else yang menyaring range detiknya. Pertama kami membuat if untuk mengecek apakah argumen sama dengan * dan jika sesuai detik akan dimasukkan nilai yang diluar range yang akan digunakan pada if berikutnya. Setelah itu, kami memasukkan argumen kedalam cekdigit. Jika cekdigit memiliki nilai true, program akan berhenti dan memberitahu user argumen yang benar. Dan jika cekdigit memiliki nilai false, argumen akan dicek apakah detik/menit/jam sesuai dengan range yang ditentukan. Contoh implementasinya adalah sebagai berikut : 
  ```
   // Mengecek apabila detik sesuai argumen yang diinginkan
   if(strcmp(argv[1],"*") == 0) detik = 60;
@@ -43,15 +48,47 @@ Dalam potongan kode ini, kami memastikan bahwa argumen yang dimasukan berisi 5 a
       return 0;
     }
   }
-  ```
-Setelah itu, kami memastikan bahwa argumen untuk detik merupakan angka dan berada dalam range 0-59. Untuk memastikan itu, kami membuat suatu fungsi yang dinamakan cekdigit. Fungsi cekdigit berbentuk sebagai berikut:
 ```
-int cekdigit(char* input){
-  int i=0;
-  for(i; i < strlen(input); i++){
-    if(isalpha(input[i])) return -1;
+Setelah itu, dibuat error-handling untuk menit & jam yang dibentuk mirip dengan error-handling untuk detik.
+
+C. Soal : Program hanya memiliki 1 config cron.
+Program hanya memiliki 1 config cron berarti program hanya akan menerima 1 set argumen. Oleh karena itu, dibuatlah error handling pada argumen agar hanya dapat menerima 4 argumen. Contoh implementasinya adalah sebagai berikut :
+```
+  // Mengecek apabila argumen sama dengan 4
+  if(argc != 5){ //Argumen terakhir untuk NULL
+    printf("Harus 4 Argumen!!!\n");
+    return 0;
   }
-  return 1;
-}
 ```
-Fungsi cekdigit dibangun agar dapat dipakai dalam error handling untuk argumen detik,menit,jam. - NICO LANJUTIN JANGAN NGELIVE NJIR
+Dalam potongan kode ini, kami memastikan bahwa argumen yang dimasukan berisi 5 argumen yang ditandai dengan argc (Argumen yang terakhir merupakan NULL). Oleh karena itu, jika argumen tidak sama dengan 5 program tidak akan berjalan dan memberitahu bahwa user hanya bisa memberikan 4 argumen.
+
+D. Soal : Program berjalan di background (daemon).
+Prgoram untuk menjalankan bash berjalan di daemon. Untuk pengimplementasiannya, kami menggunakan contoh implementasi dari modul sisop dan menuliskan program untuk run suatu bash. Implementasi program adalah sebagai berikut :
+```
+while (1) {
+    int status;
+    time_t rawtime;
+    struct tm*info = localtime(&rawtime);
+    char buffer[80];
+
+    info = localtime(&rawtime);
+    // Menyimpan info waktu sekarang dalam variabel buffer
+    strftime(buffer,80,"%Y-%m-%d_%H:%M:%S", info);
+    // Print Jam sekarang
+    printf("Jam Sekarang : %s",buffer);
+
+    //Isi Struct tm : tutorialspoint.com/c_standard_library/c_function_localtime.htm
+    if((info->tm_sec == detik || detik == 60) && (info->tm_min == menit || menit == 60) && (info->tm_hour == jam || jam == 24)){
+	pid_t child_id;
+	child_id = fork();
+
+	if(child_id == 0){
+	  //CHILD
+	  char *bashscr[] = {"bash", argv[4], NULL};
+	  execv("/usr/bin/bash", bashscr);
+	}
+	else while ((wait(&status)) > 0);
+	//Mempunyai Jarak 1 detik
+	sleep(1);
+    }
+```
