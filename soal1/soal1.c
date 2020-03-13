@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
-#include <wait.h>
+#include <sys/wait.h>
 
 int cekdigit(char* input){
   int i=0;
@@ -104,14 +104,15 @@ int main(int argc, char *argv[]) {
   while (1) {
     int status;
     time_t rawtime;
-    struct tm*info = localtime(&rawtime);
+    struct tm*info;
     char buffer[80];
+    time (&rawtime);
 
-    info = localtime(&rawtime);
-    // Menyimpan info waktu sekarang dalam variabel buffer
-    strftime(buffer,80,"%Y-%m-%d_%H:%M:%S", info);
-    // Print Jam sekarang
-    printf("Jam Sekarang : %s",buffer);
+    info = localtime( &rawtime );
+
+    //Print Jam sekarang
+    //strftime(buffer,80,"%Y-%m-%d_%H:%M:%S", info);
+    //printf("Jam Sekarang : %s",buffer);
 
     //Isi Struct tm : tutorialspoint.com/c_standard_library/c_function_localtime.htm
     if((info->tm_sec == detik || detik == 60) && (info->tm_min == menit || menit == 60) && (info->tm_hour == jam || jam == 24)){
@@ -121,8 +122,9 @@ int main(int argc, char *argv[]) {
 	if(child_id == 0){
 	  //CHILD
 	  char *bashscr[] = {"bash", argv[4], NULL};
-	  execv("/usr/bin/bash", bashscr);
+	  execv("/bin/bash", bashscr);
 	}
+	//PARENT GA NGAPA-NGAPAIN
 	else while ((wait(&status)) > 0);
 	//Mempunyai Jarak 1 detik
 	sleep(1);
