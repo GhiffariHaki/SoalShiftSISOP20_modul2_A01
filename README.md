@@ -22,7 +22,7 @@ e. Tidak boleh menggunakan fungsi system()
 # Jawaban
 
 A. Soal : Program menerima 4 argumen berupa detik, menit, jam, path file.
-Program
+Dalam Soal ini, diberi tahu constraint dan argumen-argumen yang akan digunakan untuk soal-soal sebelumnya.
 
 B. Soal : Program akan mengeluarkan pesan error jika argumen yang diberikan tidak sesuai.
 Maksud dari soal ini yang kami tangkap adalah kami memastikan bahwa argumen untuk detik,menit,jam merupakan angka dan berada dalam suatu range. Untuk memastikan argumen berisi angka, kami membuat suatu fungsi yang dinamakan cekdigit. Fungsi cekdigit berbentuk sebagai berikut:
