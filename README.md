@@ -5,6 +5,8 @@ Nikodemus Siahaan - 05111840000151
 
 # Soal1
 
+Source code : [soal1.c](https://github.com/GhiffariHaki/SoalShiftSISOP20_modul2_A01/blob/master/soal1/soal1.c)
+
 Soal : Buatlah program C yang menyerupai crontab untuk menjalankan script bash dengan
 ketentuan sebagai berikut:
 a. Program menerima 4 argumen berupa:
@@ -66,16 +68,18 @@ D. Soal : Program berjalan di background (daemon).
 Prgoram untuk menjalankan bash berjalan di daemon. Untuk pengimplementasiannya, kami menggunakan contoh implementasi dari modul sisop dan menuliskan program untuk run suatu bash. Implementasi program adalah sebagai berikut :
 ```
 while (1) {
+  while (1) {
     int status;
     time_t rawtime;
-    struct tm*info = localtime(&rawtime);
+    struct tm*info;
     char buffer[80];
+    time (&rawtime);
 
-    info = localtime(&rawtime);
-    // Menyimpan info waktu sekarang dalam variabel buffer
-    strftime(buffer,80,"%Y-%m-%d_%H:%M:%S", info);
-    // Print Jam sekarang
-    printf("Jam Sekarang : %s",buffer);
+    info = localtime( &rawtime );
+
+    //Print Jam sekarang
+    //strftime(buffer,80,"%Y-%m-%d_%H:%M:%S", info);
+    //printf("Jam Sekarang : %s",buffer);
 
     //Isi Struct tm : tutorialspoint.com/c_standard_library/c_function_localtime.htm
     if((info->tm_sec == detik || detik == 60) && (info->tm_min == menit || menit == 60) && (info->tm_hour == jam || jam == 24)){
@@ -85,10 +89,17 @@ while (1) {
 	if(child_id == 0){
 	  //CHILD
 	  char *bashscr[] = {"bash", argv[4], NULL};
-	  execv("/usr/bin/bash", bashscr);
+	  execv("/bin/bash", bashscr);
 	}
+	//PARENT GA NGAPA-NGAPAIN
 	else while ((wait(&status)) > 0);
 	//Mempunyai Jarak 1 detik
 	sleep(1);
     }
 ```
+Awalnya kami mendapatkan time dari system menggunakan fungsi localtime. Setelah itu dicek apakah argumen sesuai dengan waktu sekarang atau argumen merupakan * yang nantinya auto TRUE. Setelah itu, masuk kedalam proses yang menjalankan bashscript. Program menggunakan execv & wait agar tidak adanya Zombie Process. Proses tersebut diberi jeda `sleep(1)` sesuai dengan soal (1 Detik). Dan bash yang kami gunakan merupakan bashsoal1.sh yang diupload di dalam directory yang sama dengan sourcecode.
+
+Kendala : Sebelum debugging, banyak munculin Zombie Process
+
+E. Soal : Tidak boleh menggunakan fungsi system()
+Kelihatan lah ya gak pake fungsi system :v
