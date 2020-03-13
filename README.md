@@ -105,3 +105,5 @@ E. Soal : Tidak boleh menggunakan fungsi system()
 Kelihatan lah ya gak pake fungsi system :v
 
 Contoh Implementasi : ![TEST](https://user-images.githubusercontent.com/57068224/76614387-8d442b00-6552-11ea-82e2-8326f34853ff.png)
+
+Contoh hasil dari log.log : ![loglog](https://user-images.githubusercontent.com/57068224/76614453-af3dad80-6552-11ea-9284-639ded5fb755.png)
