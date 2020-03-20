@@ -14,12 +14,14 @@
 int cekdigit(char* input){
   int i=0;
   for(i; i < strlen(input); i++){
-    if(isalpha(input[i])) return -1;
+    if(isalpha(input[i])) return 1;
   }
-  return 1;
+  return 0;
 }
 
 int main(int argc, char *argv[]) {
+
+  printf("%s, %s, %s, %s\n", argv[1], argv[2], argv[3], argv[4]);
   int jam,menit,detik;
   // Mengecek apabila argumen sama dengan 4
   if(argc != 5){ //Argumen terakhir untuk NULL
@@ -33,12 +35,12 @@ int main(int argc, char *argv[]) {
     printf("Harus Input Angka 0-59!!\n");
     return 0;
   }
-  else{
-    detik = atoi(argv[1]);
-    if(detik > 59 || detik < 0){
-      printf("Harus Input Angka 0-59!!\n");
-      return 0;
-    }
+  else {
+   detik = atoi(argv[1]);
+   if(detik > 23 || detik < 0){
+       printf("Harus Input Angka 0-23!!\n");
+       return 0;
+   }
   }
 
   // Mengecek apabila menit sesuai argumen yang diinginkan
@@ -47,12 +49,12 @@ int main(int argc, char *argv[]) {
     printf("Harus Input Angka 0-59!!\n");
     return 0;
   }
-  else{
-    menit = atoi(argv[2]);
-    if(menit > 59 || menit < 0){
-      printf("Harus Input Angka 0-59!!\n");
-      return 0;
-    }
+  else {
+   menit = atoi(argv[2]);
+   if(menit > 23 || menit < 0){
+       printf("Harus Input Angka 0-23!!\n");
+       return 0;
+   }
   }
 
 
@@ -62,15 +64,15 @@ int main(int argc, char *argv[]) {
     printf("Harus Input Angka 0-23!!\n");
     return 0;
   }
-  else{
-    jam = atoi(argv[3]);
-    if(jam > 23 || jam < 0){
-      printf("Harus Input Angka 0-23!!\n");
-      return 0;
-    }
+  else {
+   jam = atoi(argv[3]);
+   if(jam > 23 || jam < 0){
+       printf("Harus Input Angka 0-23!!\n");
+       return 0;
+   }
   }
 
-  //printf("%d, %d, %d, %s\n", detik, menit, jam, argv[4]);
+  printf("%d, %d, %d, %s\n", detik, menit, jam, argv[4]);
 
   // BEGIN CONTOH IMPLEMENTASI DAEMON MODUL
   pid_t pid, sid;        // Variabel untuk menyimpan PID
@@ -115,7 +117,8 @@ int main(int argc, char *argv[]) {
     //printf("Jam Sekarang : %s",buffer);
 
     //Isi Struct tm : tutorialspoint.com/c_standard_library/c_function_localtime.htm
-    if((info->tm_sec == detik || detik == 60) && (info->tm_min == menit || menit == 60) && (info->tm_hour == jam || jam == 24)){
+    if((info->tm_sec == detik || detik == 60 || detik == 0) && (info->tm_min == menit || menit == 60 || menit == 0) &&
+(info->tm_hour == jam || jam == 24 || jam == 0)){
 	pid_t child_id;
 	child_id = fork();
 
