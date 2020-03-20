@@ -30,9 +30,9 @@ Maksud dari soal ini yang kami tangkap adalah kami memastikan bahwa argumen untu
 int cekdigit(char* input){
   int i=0;
   for(i; i < strlen(input); i++){
-    if(isalpha(input[i])) return -1;
+    if(isalpha(input[i])) return 1;
   }
-  return 1;
+  return 0;
 }
 ```
 Fungsi cekdigit dibangun agar dapat dipakai dalam error handling untuk argumen detik,menit,jam. Setelah dibuat fungsi cekdigit, kami membuat if-else yang menyaring range detiknya. Pertama kami membuat if untuk mengecek apakah argumen sama dengan * dan jika sesuai detik akan dimasukkan nilai yang diluar range yang akan digunakan pada if berikutnya. Setelah itu, kami memasukkan argumen kedalam cekdigit. Jika cekdigit memiliki nilai true, program akan berhenti dan memberitahu user argumen yang benar. Dan jika cekdigit memiliki nilai false, argumen akan dicek apakah detik/menit/jam sesuai dengan range yang ditentukan. Contoh implementasinya adalah sebagai berikut : 
